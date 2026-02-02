@@ -1,0 +1,95 @@
+.coffeeList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.coffeeListItem {
+    background-color: #332619;
+    border-radius: 0.5rem;
+    width: 100%;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.coffeeImageContainer {
+    padding: 0.7rem 0.7rem 0 0.7rem;
+}
+
+.coffeeImage {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    border-radius: 0.5rem;
+    object-fit: cover;
+}
+
+.coffeeTitleContainer {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+}
+
+.coffeeTitle {
+    margin: 0;
+    padding: 0.7rem 0.7rem 0 0.7rem;
+    font-size: 16px;
+}
+
+.bookmarkButton__enabled {
+    width: 16px;
+    height: 16px;
+    padding: 0.7rem 0.7rem 0 0.7rem;
+    color: var(--primary)
+}
+
+.bookmarkButton__disabled {
+    width: 16px;
+    height: 16px;
+    padding: 0.7rem 0.7rem 0 0.7rem;
+    color: var(--secondary)
+}
+
+.coffeeDescription {
+    margin: 0;
+    padding: 0.7rem 0.7rem 0 0.7rem;
+    font-size: small;
+    color: #c9ad92;
+}
+
+.coffeeRankingContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.coffeeRankingStars {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 20%;
+    height: 30px;
+    border-radius: 0.5rem;
+    background-color: #d4731140;
+}
+
+.coffeeStartsIcon {
+    width: 12px;
+    height: 12px;
+    color: var(--primary);
+}
+
+.coffeeStartsCount {
+    color: var(--primary);
+    font-weight: bold;
+    font-size: 12;
+}
+
+.coffeeCountReviews {
+    color: #9ca3af;
+    font-size: small;
+}
