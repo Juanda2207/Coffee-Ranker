@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import { Coffee } from "@/types";
+import { CoffeeWithReview } from "@/types/index";
 
 import styles from './CoffeeList.module.css';
 import Image from "next/image";
@@ -12,23 +12,28 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
-    initialCoffees: Coffee[];
+    initialCoffees: CoffeeWithReview[];
 }
 
 export default function CoffeeList({ initialCoffees }: Props) {
 
-    const [coffees, setCoffees] = useState<Coffee[]>(initialCoffees);
+    const [coffees, setCoffees] = useState<CoffeeWithReview[]>(initialCoffees);
 
     useEffect(() => {
         const getCoffees = async () => {
             const { data, error } = await supabase
                 .from("coffee")
-                .select("id, name, description, image");
+                .select(`
+                    id, 
+                    name, 
+                    description, 
+                    image,
+                    review(score)`);
 
             if (error) {
                 console.error("Error fetching coffees:", error);
             } else {
-                setCoffees(data || []);
+                setCoffees(data as CoffeeWithReview[]);
             }
         };
         getCoffees(); // First call
@@ -45,10 +50,10 @@ export default function CoffeeList({ initialCoffees }: Props) {
                     console.log('Change received!', payload);
                     switch (payload.eventType) {
                         case 'INSERT':
-                            setCoffees((prev) => [...prev, payload.new]);
+                            setCoffees((prev) => [...prev, payload.new as CoffeeWithReview]);
                             break;
                         case 'UPDATE':
-                            setCoffees((prev) => prev.map(item => item.id === payload.new.id ? payload.new : item));
+                            setCoffees((prev) => prev.map(item => item.id === payload.new.id ? payload.new as CoffeeWithReview : item));
                             break;
                         case 'DELETE':
                             setCoffees((prev) => prev.filter(item => item.id !== payload.old.id));
@@ -69,7 +74,7 @@ export default function CoffeeList({ initialCoffees }: Props) {
                 <div key={coffee.id} className={styles.coffeeListItem}>
 
                     <div className={styles.coffeeImageContainer}>
-                        <Image src={coffee.image} alt={coffee.name} className={styles.coffeeImage} width={1920} height={1080}></Image>
+                        <Image src={coffee.image == "" || coffee.image == null ? "/placeholder.jpg" : coffee.image} alt={coffee.name} className={styles.coffeeImage} width={1920} height={1080}></Image>
                     </div>
 
                     <div className={styles.coffeeTitleContainer}>
@@ -81,9 +86,13 @@ export default function CoffeeList({ initialCoffees }: Props) {
                     <div className={styles.coffeeRankingContainer}>
                         <div className={styles.coffeeRankingStars}>
                             <FontAwesomeIcon icon={faStar} className={styles.coffeeStartsIcon} />
-                            <span className={styles.coffeeStartsCount}>{coffee.rating || '5.0'}</span>
+                            <span className={styles.coffeeStartsCount}>
+                                {coffee.review && coffee.review.length > 0
+                                    ? (coffee.review.reduce((sum, r) => sum + r.score!, 0) / coffee.review.length).toFixed(1)
+                                    : '0.0'}
+                            </span>
                         </div>
-                        <span className={styles.coffeeCountReviews}>({coffee.review_count || 0} reviews)</span>
+                        <span className={styles.coffeeCountReviews}>({coffee.review?.length || 0} reviews)</span>
                     </div>
                 </div>
             ))}

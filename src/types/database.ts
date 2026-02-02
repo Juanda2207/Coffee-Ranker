@@ -17,7 +17,7 @@ export type Database = {
       coffee: {
         Row: {
           created_at: string
-          created_by: number
+          created_by: number | null
           description: string | null
           id: number
           image: string | null
@@ -25,7 +25,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          created_by: number
+          created_by?: number | null
           description?: string | null
           id?: number
           image?: string | null
@@ -33,7 +33,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          created_by?: number
+          created_by?: number | null
           description?: string | null
           id?: number
           image?: string | null
@@ -42,6 +42,48 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "coffee_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      review: {
+        Row: {
+          coffee_id: number
+          created_at: string
+          created_by: number
+          id: number
+          observations: string | null
+          score: number | null
+        }
+        Insert: {
+          coffee_id: number
+          created_at?: string
+          created_by: number
+          id?: number
+          observations?: string | null
+          score?: number | null
+        }
+        Update: {
+          coffee_id?: number
+          created_at?: string
+          created_by?: number
+          id?: number
+          observations?: string | null
+          score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_coffee_id_fkey"
+            columns: ["coffee_id"]
+            isOneToOne: false
+            referencedRelation: "coffee"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "review_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "user"
