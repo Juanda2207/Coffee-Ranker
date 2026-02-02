@@ -11,13 +11,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 
-interface Props {
-    initialCoffees: CoffeeWithReview[];
-}
+export default function CoffeeList() {
 
-export default function CoffeeList({ initialCoffees }: Props) {
-
-    const [coffees, setCoffees] = useState<CoffeeWithReview[]>(initialCoffees);
+    const [coffees, setCoffees] = useState<CoffeeWithReview[]>([]);
 
     useEffect(() => {
         const getCoffees = async () => {
@@ -28,7 +24,8 @@ export default function CoffeeList({ initialCoffees }: Props) {
                     name, 
                     description, 
                     image,
-                    review(score)`);
+                    review(score)`)
+                .order('created_at', { ascending: false });
 
             if (error) {
                 console.error("Error fetching coffees:", error);
@@ -74,7 +71,7 @@ export default function CoffeeList({ initialCoffees }: Props) {
                 <div key={coffee.id} className={styles.coffeeListItem}>
 
                     <div className={styles.coffeeImageContainer}>
-                        <Image src={coffee.image == "" || coffee.image == null ? "/placeholder.jpg" : coffee.image} alt={coffee.name} className={styles.coffeeImage} width={1920} height={1080}></Image>
+                        <Image src={coffee.image == "" || coffee.image == null ? "/placeholder.jpg" : coffee.image} alt={coffee.name} className={styles.coffeeImage} width={1920} height={1080} loading="lazy"></Image>
                     </div>
 
                     <div className={styles.coffeeTitleContainer}>
